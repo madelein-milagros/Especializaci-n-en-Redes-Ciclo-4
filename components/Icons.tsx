@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { Network, Server, ShieldAlert, Globe, ChevronDown, ChevronUp, ExternalLink, Trophy, Book, Wrench, X } from 'lucide-react';
+import { Network, Server, ShieldAlert, Globe, ChevronDown, ChevronUp, ExternalLink, Trophy, Book, Wrench, X, Youtube } from 'lucide-react';
 
 export const IconMap: Record<string, React.ReactNode> = {
   Network: <Network className="w-5 h-5 md:w-6 md:h-6" />,
@@ -13,5 +13,6 @@ export const IconMap: Record<string, React.ReactNode> = {
   Trophy: <Trophy className="w-5 h-5 text-white/50" />,
   Book: <Book className="w-5 h-5" />,
   Wrench: <Wrench className="w-5 h-5" />,
-  X: <X className="w-5 h-5" />
+  X: <X className="w-5 h-5" />,
+  Youtube: <Youtube className="w-4 h-4" />
 };

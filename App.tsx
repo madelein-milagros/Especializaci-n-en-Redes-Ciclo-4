@@ -21,8 +21,10 @@ const App: React.FC = () => {
   const closeModal = () => setSelectedCourse(null);
 
   const shareOnLinkedIn = (courseTitle: string) => {
-    const text = `¡He completado el módulo de ${courseTitle} en mi carrera de Redes! #Tecsup #Redes #Administración de Redes y Comunicaciones`;
-    const url = `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(window.location.href)}&summary=${encodeURIComponent(text)}`;
+    const careerTag = "Administración de Redes y Comunicaciones";
+    // Formato exacto solicitado por el usuario
+    const text = encodeURIComponent(`¡Módulo "${courseTitle}" completado en @Tecsup! 🚀 #${careerTag.replace(/\s+/g, '')} #Redes #Ciclo3`);
+    const url = `https://www.linkedin.com/feed/?shareActive=true&text=${text}`;
     window.open(url, '_blank');
   };
 
@@ -51,11 +53,11 @@ const App: React.FC = () => {
       </header>
 
       <main className="flex-1 relative overflow-hidden bg-[radial-gradient(#e5e7eb_1px,transparent_1px)] [background-size:20px_20px]">
-        {/* LIENZO DEL MAPA (Escalado para Single Page) */}
+        {/* LIENZO DEL MAPA */}
         <div className="absolute inset-0 flex items-center justify-center p-4 md:p-12">
           <div className="relative w-full h-full max-w-6xl max-h-[500px]">
             
-            {/* SVG de la Carretera Delgada e Institucional */}
+            {/* SVG de la Carretera */}
             <svg className="absolute inset-0 w-full h-full drop-shadow-xl" viewBox="0 0 1000 600" preserveAspectRatio="xMidYMid meet">
               <path 
                 d="M 100 132 H 850 C 950 132, 950 300, 850 300 H 150 C 50 300, 50 468, 150 468 H 800" 
@@ -92,7 +94,7 @@ const App: React.FC = () => {
               </div>
             ))}
 
-            {/* Checkpoint Final (Meta) */}
+            {/* Checkpoint Final */}
             <div className="absolute" style={{ left: '80%', top: '78%' }}>
                <Checkpoint text={CHECKPOINT_TEXT} />
             </div>
@@ -109,7 +111,14 @@ const App: React.FC = () => {
           >
             {/* Header de la Tarjeta */}
             <div className="bg-[#6a041a] p-8 text-white relative">
-               <button onClick={closeModal} className="absolute top-6 right-6 w-8 h-8 flex items-center justify-center rounded-full bg-white/10 hover:bg-white/20 text-white transition-all">✕</button>
+               <button 
+                 onClick={(e) => {
+                   e.stopPropagation();
+                   closeModal();
+                 }} 
+                 className="absolute top-6 right-6 w-8 h-8 flex items-center justify-center rounded-full bg-white/10 hover:bg-white/20 text-white transition-all z-[60]"
+                 aria-label="Cerrar"
+               >✕</button>
                <div className="relative z-10">
                  <div className="flex items-center gap-2 mb-2">
                    <span className="text-[9px] font-black uppercase tracking-[0.4em] text-white/60">Paso 0{COURSES.indexOf(selectedCourse) + 1}</span>
@@ -119,7 +128,6 @@ const App: React.FC = () => {
                    {selectedCourse.title}
                  </h2>
                </div>
-               {/* Icono de fondo */}
                <div className="absolute -right-8 -bottom-8 opacity-[0.03] scale-[2.5] rotate-12">
                   {IconMap[selectedCourse.icon]}
                </div>
@@ -136,14 +144,13 @@ const App: React.FC = () => {
                   </p>
                </div>
 
-               {/* Acciones de la Tarjeta */}
                <div className="grid grid-cols-1 gap-3">
                   <div className="flex gap-3">
                     <button 
                       onClick={() => setShowTutorial(true)}
                       className="flex-1 bg-red-50 hover:bg-red-100 text-[#ab022f] py-3.5 rounded-2xl font-black text-[10px] uppercase tracking-widest flex items-center justify-center gap-2 transition-all border border-red-100"
                     >
-                      Ver Guía de Módulo {IconMap.ExternalLink}
+                      Ver Guía de Módulo {IconMap.Youtube}
                     </button>
                     <a 
                       href={selectedCourse.link} 
@@ -171,16 +178,20 @@ const App: React.FC = () => {
         </div>
       )}
 
-      {/* MODAL DE VIDEO TUTORIAL (Triggered desde la tarjeta) */}
+      {/* MODAL DE VIDEO TUTORIAL */}
       {showTutorial && (
-        <div className="fixed inset-0 z-[60] flex items-center justify-center p-4 bg-black/90 backdrop-blur-xl animate-fadeIn" onClick={() => setShowTutorial(false)}>
+        <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/90 backdrop-blur-xl animate-fadeIn" onClick={() => setShowTutorial(false)}>
           <div 
             className="w-full max-w-4xl aspect-video bg-black rounded-3xl overflow-hidden shadow-2xl relative border border-white/10"
             onClick={(e) => e.stopPropagation()}
           >
             <button 
-              onClick={() => setShowTutorial(false)}
-              className="absolute top-4 right-4 z-10 bg-white/10 hover:bg-white/20 text-white w-10 h-10 rounded-full flex items-center justify-center backdrop-blur-md"
+              onClick={(e) => {
+                e.stopPropagation();
+                setShowTutorial(false);
+              }}
+              className="absolute top-4 right-4 z-[110] bg-white/10 hover:bg-white/20 text-white w-10 h-10 rounded-full flex items-center justify-center backdrop-blur-md"
+              aria-label="Cerrar video"
             >✕</button>
             <iframe 
               className="w-full h-full"
